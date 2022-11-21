@@ -1,20 +1,24 @@
 package com.example.showprrequests.showPrRequest.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.showprrequests.ShowPrApplication
 import com.example.showprrequests.databinding.FragmentShowPrListBinding
+import com.example.showprrequests.showPrRequest.common.AppUtil
 import com.example.showprrequests.showPrRequest.di.showpr.ShowPrComponent
+import com.example.showprrequests.showPrRequest.presentation.adapter.ShowPrListAdapter
 import com.example.showprrequests.showPrRequest.presentation.adapter.ShowPrListState
 import com.example.showprrequests.showPrRequest.presentation.adapter.ShowPrListViewModel
 import javax.inject.Inject
+
 
 class ShowPrListFragment : Fragment() {
 
@@ -26,7 +30,7 @@ class ShowPrListFragment : Fragment() {
     lateinit var binding:FragmentShowPrListBinding
     lateinit var recyclerView: RecyclerView
 
-    private val adapter:ShowPrListAdapter by lazy {
+    private val adapter: ShowPrListAdapter by lazy {
         ShowPrListAdapter()
     }
 
@@ -54,6 +58,7 @@ class ShowPrListFragment : Fragment() {
         viewModel.prListData.observe(this, Observer {
             if(it.isNotEmpty()) {
                 adapter.submitList(it)
+                isLoading  = false
                 showAndHideEmptyState(hide = true)
             }else{
                 showAndHideEmptyState(hide = false)
@@ -98,11 +103,43 @@ class ShowPrListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        initScrollListener()
     }
 
     private fun initRecyclerView(){
         recyclerView = binding.rvShowPrList
         recyclerView.adapter = adapter
+    }
+    var isLoading = false
+    private fun initScrollListener() {
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.itemCount.minus(
+                            1
+                        ) )
+                    ) {
+                        loadMore()
+                        isLoading = true
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadMore(){
+        if(AppUtil.isNetworkAvailable()){
+           viewModel.loadData()
+        }else{
+            Toast.makeText(
+                context,
+                "Please check internet connection",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
 }

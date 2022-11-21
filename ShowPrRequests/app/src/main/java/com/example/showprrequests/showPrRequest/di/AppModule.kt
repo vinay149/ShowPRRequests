@@ -14,7 +14,6 @@ class AuthInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-            requestBuilder.addHeader("Authorization", "Bearer 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")
         return chain.proceed(requestBuilder.build())
     }
 }

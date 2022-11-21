@@ -5,7 +5,7 @@ import retrofit2.Call
 import javax.inject.Inject
 
 class ShowPrListUseCase @Inject constructor(private val showPrListRepositoryImpl: ShowPrListRepository){
-      suspend fun getPrList(): Call<List<ShowPrListResponse>>{
-           return showPrListRepositoryImpl.getPrListFromGithub()
+      suspend fun getPrList(pageNumber:Int): Call<List<ShowPrListResponse>>{
+           return showPrListRepositoryImpl.getPrListFromGithub(pageNumber)
       }
 }

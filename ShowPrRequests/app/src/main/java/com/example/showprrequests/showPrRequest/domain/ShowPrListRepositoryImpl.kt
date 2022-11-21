@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ShowPrListRepositoryImpl @Inject constructor(private val showPrListService: ShowPrListService) : ShowPrListRepository {
 
-    override suspend fun getPrListFromGithub():Call<List<ShowPrListResponse>>{
-        return showPrListService.getPrList()
+    override suspend fun getPrListFromGithub(pageNumber: Int ):Call<List<ShowPrListResponse>>{
+        return showPrListService.getPrList(pageNumber)
     }
 }

@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 
 interface ShowPrListRepository {
-    suspend fun getPrListFromGithub():Call<List<ShowPrListResponse>>
+    suspend fun getPrListFromGithub(pageNumber:Int):Call<List<ShowPrListResponse>>
 }

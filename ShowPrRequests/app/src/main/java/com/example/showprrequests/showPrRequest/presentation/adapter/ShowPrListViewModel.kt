@@ -16,11 +16,13 @@ import javax.inject.Inject
 class ShowPrListViewModel @Inject constructor (private val showPrListUseCase: ShowPrListUseCase):ViewModel() {
     var prListData:MutableLiveData<List<ShowPrListResponse>> = MutableLiveData()
     var dataFetchingState:MutableLiveData<ShowPrListState> = MutableLiveData(ShowPrListState.LOADING)
+    var pageNumber:Int = 1
 
     fun loadData(){
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val data = showPrListUseCase.getPrList()
+
+                val data = showPrListUseCase.getPrList(pageNumber+1)
                 data.enqueue(object : Callback<List<ShowPrListResponse>> {
 
                     override fun onResponse(
@@ -28,8 +30,12 @@ class ShowPrListViewModel @Inject constructor (private val showPrListUseCase: Sh
                         response: Response<List<ShowPrListResponse>>
                     ) {
                         response.body()?.let {
-                            prListData.postValue(it)
+                            val newList:MutableList<ShowPrListResponse> = ArrayList()
+                            newList.addAll(prListData.value?: emptyList())
+                            newList.addAll(it)
+                            prListData.postValue(newList)
                         }
+                        pageNumber += 1
                         dataFetchingState.postValue(ShowPrListState.FETCHED)
                     }
 

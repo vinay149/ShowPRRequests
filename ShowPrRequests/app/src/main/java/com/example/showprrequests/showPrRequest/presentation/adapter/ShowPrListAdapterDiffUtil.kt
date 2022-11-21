@@ -8,7 +8,7 @@ class ShowPrListAdapterDiffUtil: DiffUtil.ItemCallback<ShowPrListResponse>(){
     override fun areItemsTheSame( oldItem: ShowPrListResponse,
                                   newItem: ShowPrListResponse
     ): Boolean {
-        return  oldItem.title == oldItem.title && oldItem.created_at == newItem.created_at
+        return  oldItem.id == oldItem.id
     }
 
     override fun areContentsTheSame( oldItem: ShowPrListResponse,
