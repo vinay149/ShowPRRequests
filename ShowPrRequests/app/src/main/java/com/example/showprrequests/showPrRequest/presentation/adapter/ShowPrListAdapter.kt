@@ -2,13 +2,17 @@ package com.example.showprrequests.showPrRequest.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.showprrequests.databinding.ShowPrListItemBinding
+import com.example.showprrequests.showPrRequest.common.AppUtil
 import com.example.showprrequests.showPrRequest.data.ShowPrListResponse
+import com.example.showprrequests.showPrRequest.presentation.adapter.ShowPrListAdapterDiffUtil
 
-class ShowPrListAdapter:ListAdapter<ShowPrListResponse,ShowPrListAdapterViewHolder>(ShowPrListAdapterDiffUtil()) {
+
+class ShowPrListAdapter:ListAdapter<ShowPrListResponse,ShowPrListAdapterViewHolder>(
+    ShowPrListAdapterDiffUtil()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowPrListAdapterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -24,28 +28,18 @@ class ShowPrListAdapter:ListAdapter<ShowPrListResponse,ShowPrListAdapterViewHold
 
 class ShowPrListAdapterViewHolder(private val binding: ShowPrListItemBinding):RecyclerView.ViewHolder(binding.root){
 
-      fun bindData(item:ShowPrListResponse){
-          binding.tvClosedAt.text = item.closed_at
-          binding.tvTitle.text = item.title
-          binding.tvUserName.text = item.user?.login
-          binding.tvCreatedAt.text = item.created_at
-      }
-
-}
-
-class ShowPrListAdapterDiffUtil:DiffUtil.ItemCallback<ShowPrListResponse>(){
-    override fun areItemsTheSame(
-        oldItem: ShowPrListResponse,
-        newItem: ShowPrListResponse
-    ): Boolean {
-        return  oldItem.title == oldItem.title
+    fun bindData(item:ShowPrListResponse){
+        setData(item)
+        AppUtil.loadImage(binding.imgUserLogo,item.user?.avatar_url!!)
     }
 
-    override fun areContentsTheSame(
-        oldItem: ShowPrListResponse,
-        newItem: ShowPrListResponse
-    ): Boolean {
-        return oldItem==newItem
+    private fun setData(item:ShowPrListResponse){
+
+        binding.tvClosedAt.text = item.closed_at
+        binding.tvTitle.text = item.title
+        binding.tvUserName.text = item.user?.login
+        binding.tvCreatedAt.text = item.created_at
     }
 
 }
+

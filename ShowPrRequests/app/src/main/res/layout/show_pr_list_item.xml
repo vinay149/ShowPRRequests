@@ -11,8 +11,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/imgUserLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
     <TextView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgUserLogo"
@@ -24,6 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvUserName"
         app:layout_constraintStart_toEndOf="@+id/imgUserLogo"
         android:id="@+id/tvTitle"
+        android:layout_marginStart="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
    <TextView
